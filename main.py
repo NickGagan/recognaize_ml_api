@@ -25,8 +25,8 @@ CORS(app)
 
 
 # Load models
-tfidf = joblib.load("./models/tfidf.pkl")
-d2vModel = Doc2Vec.load("./models/d2v.model", allow_pickle=True)
+# tfidf = joblib.load("./models/tfidf.pkl")
+# d2vModel = Doc2Vec.load("./models/d2v.model", allow_pickle=True)
 
 # Parts of speech tagging
 def posCount(text, wordCount):
@@ -49,23 +49,23 @@ def posCount(text, wordCount):
     return noun, verb, adjective, adverb
 
 # handle TFIDF results
-def processTFIDF(data, X_tf):
-    # Read the BoW file
-    with open('./models/BoW.csv', newline='') as f:
-        reader = csv.reader(f)
-        BoW = (np.array(list(reader))).flatten()
-    wc = pd.DataFrame.sparse.from_spmatrix(X_tf, columns=tfidf.get_feature_names_out())
-    wc_dict = wc.to_dict()
-    for key in wc_dict.keys():
-        if (key in BoW):
-            data["BOW"][f'{key}'] = wc_dict[f'{key}'][0]
+# def processTFIDF(data, X_tf):
+#     # Read the BoW file
+#     with open('./models/BoW.csv', newline='') as f:
+#         reader = csv.reader(f)
+#         BoW = (np.array(list(reader))).flatten()
+#     wc = pd.DataFrame.sparse.from_spmatrix(X_tf, columns=tfidf.get_feature_names_out())
+#     wc_dict = wc.to_dict()
+#     for key in wc_dict.keys():
+#         if (key in BoW):
+#             data["BOW"][f'{key}'] = wc_dict[f'{key}'][0]
 
-    return data
+#     return data
 
 # Get Doc2Vec Inference
-def getDoc2Vec(text):
-    vector = d2vModel.infer_vector(text.split(" "))
-    return vector.tolist()
+# def getDoc2Vec(text):
+#     vector = d2vModel.infer_vector(text.split(" "))
+#     return vector.tolist()
 
 class aiModel(Resource):
     def post(self):
@@ -90,11 +90,11 @@ class aiModel(Resource):
         data["compound_sent"] =  va.polarity_scores(data["clean_text"])['compound']
 
         # Run TFIDF
-        X_tf = tfidf.transform([data["clean_text"]])
-        data = processTFIDF(data, X_tf)
+        # X_tf = tfidf.transform([data["clean_text"]])
+        # data = processTFIDF(data, X_tf)
 
-        # Process Doc2Vec
-        data["post2vec"] = getDoc2Vec(data["clean_text"])
+        # # Process Doc2Vec
+        # data["post2vec"] = getDoc2Vec(data["clean_text"])
         # Pass to model
         # TODO Get results from model
         results = {
