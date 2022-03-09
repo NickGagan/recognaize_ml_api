@@ -100,6 +100,12 @@ class aiModel(Resource):
             "poor_mental_health": True
         }
         return (jsonify(results))
+    
+    def get(self):
+        try:
+            return {'data': 'Api is Running'}
+        except:
+            return {'data': 'An Error Occurred during fetching Api'}
 
 api.add_resource(aiModel, '/')
 
