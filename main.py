@@ -16,12 +16,8 @@ from flask_cors import CORS
 # Downloads needed for lemmatization
 # nltk.download('wordnet')
 # nltk.download('omw-1.4')
-wn = nltk.WordNetLemmatizer()
 
-# Read the BoW file
-with open('./models/BoW.csv', newline='') as f:
-    reader = csv.reader(f)
-    BoW = (np.array(list(reader))).flatten()
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -54,6 +50,10 @@ def posCount(text, wordCount):
 
 # handle TFIDF results
 def processTFIDF(data, X_tf):
+    # Read the BoW file
+    with open('./models/BoW.csv', newline='') as f:
+        reader = csv.reader(f)
+        BoW = (np.array(list(reader))).flatten()
     wc = pd.DataFrame.sparse.from_spmatrix(X_tf, columns=tfidf.get_feature_names_out())
     wc_dict = wc.to_dict()
     for key in wc_dict.keys():
@@ -69,6 +69,7 @@ def getDoc2Vec(text):
 
 class aiModel(Resource):
     def post(self):
+        wn = nltk.WordNetLemmatizer()
         # POS tagging
         data = request.json
         data_type = (request.args).get("type")
