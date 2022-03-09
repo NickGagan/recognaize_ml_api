@@ -1,0 +1,2 @@
+omw-1.4
+wordnet

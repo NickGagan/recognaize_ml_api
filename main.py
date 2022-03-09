@@ -14,8 +14,8 @@ from flask_cors import CORS
 
 
 # Downloads needed for lemmatization
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
 wn = nltk.WordNetLemmatizer()
 
 # Read the BoW file
