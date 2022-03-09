@@ -26,7 +26,7 @@ CORS(app)
 
 # Load models
 tfidf = joblib.load("./models/tfidf.pkl")
-d2vModel = Doc2Vec.load("./models/d2v.model")
+d2vModel = Doc2Vec.load("./models/d2v.model", allow_pickle=True)
 
 # Parts of speech tagging
 def posCount(text, wordCount):
