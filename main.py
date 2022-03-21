@@ -11,6 +11,7 @@ import csv
 import numpy as np
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import fasttext
 
 
 # Downloads needed for lemmatization
@@ -27,7 +28,6 @@ CORS(app)
 # Load models
 # tfidf = joblib.load("./models/tfidf.pkl")
 # d2vModel = Doc2Vec.load("./models/d2v.model", allow_pickle=True)
-
 # Parts of speech tagging
 def posCount(text, wordCount):
     
@@ -70,6 +70,7 @@ def posCount(text, wordCount):
 class aiModel(Resource):
     def post(self):
         wn = nltk.WordNetLemmatizer()
+        model = fasttext.load_model("./models/fasttext.bin")
         # POS tagging
         data = request.json
         data_type = (request.args).get("type")
@@ -96,9 +97,14 @@ class aiModel(Resource):
         # # Process Doc2Vec
         # data["post2vec"] = getDoc2Vec(data["clean_text"])
         # Pass to model
-        # TODO Get results from model
+        model_results = model.predict(data["clean_text"])
+        poor_mental_health = False
+        if (model_results[0][0] == '__label__1'):
+            poor_mental_health = True
         results = {
-            "poor_mental_health": True
+            "poor_mental_health": poor_mental_health,
+            "confidence": model_results[1][0]
+
         }
         return (jsonify(results))
     
